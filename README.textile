@@ -18,6 +18,7 @@ h2. Todo
 h2. Known issues
 
 * Not support for 2 graphs inline yet.
+* Inline graph not compatible with prototype.js
 
 h2. Install
 
