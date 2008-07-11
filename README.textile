@@ -13,6 +13,7 @@ h2. Todo
 * Label annotation for pies
 * May be more specs? mmm
 * Add series matcher block to allow any kind of matcher for series
+* Avoid to specify the start_date for time series for each serie
 
 h2. Install
 
@@ -38,7 +39,7 @@ h4. In the controller
 def progress
   bar_graph = OpenFlashChartLazy::Line.new("The title of the graph")
   first_serie = OpenFlashChartLazy::Serie.new([["2008-1",100],["2008-2",120],["2008-3",130]],{:title=>"Argentina",:start_date=>Time.mktime(2008,1,1),:items=>8})
-  second_serie = OpenFlashChartLazy::Serie.new([["2008-1",50],["2008-2",40],["2008-3",90]],{:title=>"Tupungato",:start_dat
+  second_serie = OpenFlashChartLazy::Serie.new([["2008-1",50],["2008-2",40],["2008-3",90]],{:title=>"Tupungato",:start_date=>Time.mktime(2008,1,1),:items=>8})
 
   bar_graph.add_serie(first_serie)
   bar_graph.add_serie(second_serie)
