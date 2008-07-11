@@ -15,6 +15,10 @@ h2. Todo
 * Add series matcher block to allow any kind of matcher for series
 * Avoid to specify the start_date for time series for each serie
 
+h2. Known issues
+
+* Not support for 2 graphs inline yet.
+
 h2. Install
 
 <pre><code>
