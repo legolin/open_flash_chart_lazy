@@ -80,11 +80,11 @@ h4. In the view
 
 h3. Other implementations for version 2
 
-http://github.com/korin/open_flash_chart_2/tree/master
+"http://github.com/korin/open_flash_chart_2/tree/master":http://github.com/korin/open_flash_chart_2/tree/master may be not working yet
 
 h3. Implementations for version 1
 
-http://github.com/markcatley/open_flash_chart/tree/master
+"http://github.com/markcatley/open_flash_chart/tree/master":http://github.com/markcatley/open_flash_chart/tree/master
 
 Enjoy!
 
