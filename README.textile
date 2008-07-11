@@ -1,6 +1,6 @@
 h1. OpenFlashChartLazy
 
-This plugin allows to use the OpenFlashChart2 with Rails.
+This plugin allows to use the OpenFlashChart version 2 with Rails.
 The idea is to get it as simple and extensible as possible, support future change of "open_flash_chart":http://teethgrinder.co.uk/open-flash-chart-2/
 
 Initially will only support line and pie graph, but is easy to add support for the other graphs
@@ -17,6 +17,8 @@ h2. Todo
 h2. Install
 
 <pre><code>
+cd vendor/plugins
+git clone git://github.com/peterpunk/open_flash_chart_lazy.git
 rake open_flash_chart_lazy:install
 </pre></code>
 
@@ -69,6 +71,14 @@ h4. In the view
 <pre><code>
 <%= inline_graph(@pie_chart) %>
 </pre></code>
+
+h3. Other implementations for version 2
+
+http://github.com/korin/open_flash_chart_2/tree/master
+
+h3. Implementations for version 1
+
+http://github.com/markcatley/open_flash_chart/tree/master
 
 Enjoy!
 
