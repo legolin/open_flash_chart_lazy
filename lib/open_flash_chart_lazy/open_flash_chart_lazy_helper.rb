@@ -15,7 +15,7 @@ module ActionView
         script = <<-EOS
         function open_flash_chart_data()
         {
-            return JSON.stringify(data);
+            return JSON.stringify(#{dom_id});
         }
         function findSWF(movieName) {
           if (navigator.appName.indexOf("Microsoft")!= -1) {
@@ -24,7 +24,7 @@ module ActionView
             return document[movieName];
           }
         }
-        var data = #{graph.to_graph_json};
+        var #{dom_id} = #{graph.to_graph_json};
         EOS
         content_tag("div","",:id=>"#{dom_id}").concat(javascript_tag(swf_object(dom_id,options)).concat(javascript_tag(script)))
       end
