@@ -4,6 +4,15 @@ This plugin allows to use the OpenFlashChart2 with Rails.
 The idea is to get it as simple and extensible as possible, support future change of "open_flash_chart":http://teethgrinder.co.uk/open-flash-chart-2/
 
 Initially will only support line and pie graph, but is easy to add support for the other graphs
+I built it to solve a problem, not all the problems that we can have in the world ;-)
+
+h2. Todo
+
+* More doc
+* Support for other graphs
+* Label annotation for pies
+* May be more specs? mmm
+* Add series matcher block to allow any kind of matcher for series
 
 h2. Install
 
@@ -61,4 +70,6 @@ h4. In the view
 <%= inline_graph(@pie_chart) %>
 </pre></code>
 
-*Copyright (c) 2008 Pedro Visintin, released under the MIT license*
+Enjoy!
+
+Copyright (c) 2008 Pedro Visintin, released under the MIT license
