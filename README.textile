@@ -5,9 +5,21 @@ The idea is to get it as simple and extensible as possible, support future chang
 
 Initially will only support line and pie graph, but is easy to add support for the other graphs
 
+h2. Install
+
+<pre><code>
+rake open_flash_chart_lazy:install
+</pre></code>
+
+h2. Uninstall
+
+<pre><code>
+rake open_flash_chart_lazy:remove
+</pre></code>
+
 h2. Examples
 
-h3. Remote
+h3. With remote data
 
 h4. In the controller
 
@@ -31,7 +43,7 @@ h4. In the view
 <%= remote_graph("my_chart","/admin/dashboard/progress") %>
 </pre></code>
 
-h3. Inline
+h3. With inline data
 
 h4. In the controller
 
