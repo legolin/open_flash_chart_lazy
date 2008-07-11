@@ -1,0 +1,32 @@
+h1. OpenFlashChartLazy
+
+This plugin allows to use the OpenFlashChart2 with Rails.
+The idea is to get it as simple and extensible as possible, support future change of "open_flash_chart":http://teethgrinder.co.uk/open-flash-chart-2/
+
+Initially will only support line and pie graph, but is easy to add support for the other graphs
+
+h3. Example
+
+h4. In the controller
+
+<pre><code>
+bar_graph = OpenFlashChartLazy::Line.new("The title of the graph")
+first_serie = OpenFlashChartLazy::Serie.new([["2008-1",100],["2008-2",120],["2008-3",130]],{:title=>"Argentina",:start_date=>Time.mktime(2008,1,1),:items=>8})
+second_serie = OpenFlashChartLazy::Serie.new([["2008-1",50],["2008-2",40],["2008-3",90]],{:title=>"Tupungato",:start_dat
+
+bar_graph.add_serie(first_serie)
+bar_graph.add_serie(second_serie)
+
+render :text=>bar_graph.to_graph_json
+
+</pre></code>
+
+h4. In the view
+
+<pre><code>
+<%= remote_graph("my_chart","/admin/dashboard/progress") %>
+<%= remote_graph("my_pie","/admin/dashboard/pie") %>
+</pre></code>
+
+
+*Copyright (c) 2008 Pedro Visintin, released under the MIT license*
