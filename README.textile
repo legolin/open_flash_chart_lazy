@@ -38,8 +38,13 @@ h4. In the controller
 <pre><code>
 def progress
   bar_graph = OpenFlashChartLazy::Line.new("The title of the graph")
-  first_serie = OpenFlashChartLazy::Serie.new([["2008-1",100],["2008-2",120],["2008-3",130]],{:title=>"Argentina",:start_date=>Time.mktime(2008,1,1),:items=>8})
-  second_serie = OpenFlashChartLazy::Serie.new([["2008-1",50],["2008-2",40],["2008-3",90]],{:title=>"Tupungato",:start_date=>Time.mktime(2008,1,1),:items=>8})
+  first_serie = OpenFlashChartLazy::Serie.new(
+  [["2008-1",100],["2008-2",120],["2008-3",130]],
+  {:title=>"Argentina",:start_date=>Time.mktime(2008,1,1),:items=>8})
+  
+  second_serie = OpenFlashChartLazy::Serie.new(
+  [["2008-1",50],["2008-2",40],["2008-3",90]],
+  {:title=>"Tupungato",:start_date=>Time.mktime(2008,1,1),:items=>8})
 
   bar_graph.add_serie(first_serie)
   bar_graph.add_serie(second_serie)
