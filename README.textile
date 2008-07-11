@@ -24,6 +24,8 @@ h2. Install
 <pre><code>
 cd vendor/plugins
 git clone git://github.com/peterpunk/open_flash_chart_lazy.git
+cd ..
+cd ..
 rake open_flash_chart_lazy:install
 </pre></code>
 
