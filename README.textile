@@ -14,6 +14,7 @@ h2. Todo
 * May be more specs? mmm
 * Add series matcher block to allow any kind of matcher for series
 * Avoid to specify the start_date for time series for each serie
+* Add periodically_call_remote_graph (rodrigo orrego chileonrails)
 
 h2. Known issues
 
@@ -64,7 +65,7 @@ end
 h4. In the view
 
 <pre><code>
-<%= remote_graph("my_chart","/admin/dashboard/progress") %>
+<%= remote_graph("my_chart",{:route=>"/admin/dashboard/progress"}) %>
 </pre></code>
 
 h3. With inline data
