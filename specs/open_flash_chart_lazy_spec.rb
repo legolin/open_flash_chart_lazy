@@ -1,5 +1,22 @@
 require File.dirname(__FILE__) + '/../../../../spec/spec_helper'
 
+
+describe OpenFlashChartLazy::Graph do
+  before(:each) do
+    @stats = OpenFlashChartLazy::Graph.new("Titulo del grafico")
+  end
+  it "should create a series hash" do
+    @stats.series.should be_a_kind_of(Array)
+    @stats.series.should be_empty
+  end
+  it "should respond to title and include the text" do
+    @stats.title.should be_a_kind_of(Hash)
+    @stats.title[:text].should == "Titulo del grafico"
+  end
+  it "should know the x axis" do
+    @stats.x_axis.should be_a_kind_of(Hash)
+  end
+end
 describe OpenFlashChartLazy::Pie do
   describe "creating a new Pie" do
     before(:each) do
@@ -57,26 +74,43 @@ describe OpenFlashChartLazy::Pie do
   end
 end
 
-describe OpenFlashChartLazy::Line do
-  describe "creating new LineGraph" do
+#{ "title": { "text": "Sat Jul 12 2008" }, "elements": [ { "type": "bar", "values": [ 9, 8, 7, 6, 5, 4, 3, 2, 1 ] } ] }
+describe OpenFlashChartLazy::Bar do
+  describe "creating a bar chart" do
     before(:each) do
-      @stats = OpenFlashChartLazy::Line.new("Titulo del grafico")
+      @stats = OpenFlashChartLazy::Pie.new("2008")
+      @data = [["TV",1000],["Internet",2343],["Post",233],[nil,43]]
+      @serie = OpenFlashChartLazy::Serie.new(@data,{:title=>"Ventas"})
+      @stats.add_serie(@serie)
     end
-    it "should create a series hash" do
-      @stats.series.should be_a_kind_of(Array)
-      @stats.series.should be_empty
+    it "should add a new hash to series hash with the label as key" do
+      @stats.series.length.should == 1
     end
-    it "should respond to title and include the text" do
-      @stats.title.should be_a_kind_of(Hash)
-      @stats.title[:text].should == "Titulo del grafico"
+    it "should add an element to elements array for each serie" do
+      @stats.elements.length.should == 1
     end
-    it "should know the x axis" do
-      @stats.x_axis.should be_a_kind_of(Hash)
+    it "should be a hash added as element" do
+      @stats.elements[0].should be_a_kind_of(Hash)
     end
-    it "should know the x axis" do
-      @stats.y_axis.should be_a_kind_of(Hash)
+    it "should add the options to the elements hash" do
+      @stats.elements[0][:type].should == "bar"
     end
+    it "should add the title to the element hash" do
+      @stats.elements[0][:text].should == "Ventas"
+    end
+    it "should fill the values and the annotations if present of the with series data" do
+      @stats.elements[0][:values].length.should == 4
+      @stats.elements[0][:values][0].should == {:value=>1000,:text=>"TV"}
+      @stats.elements[0][:values][1].should == {:value=>2343,:text=>"Internet"}
+      @stats.elements[0][:values][2].should == {:value=>233,:text=>"Post"}
+      @stats.elements[0][:values][3].should == {:value=>43, :text=>""}
+    end
+
   end
+end
+
+
+describe OpenFlashChartLazy::Line do
   describe "adding a serie" do
     before(:each) do
       @start =Time.mktime(2007,7,2)
@@ -126,6 +160,7 @@ describe OpenFlashChartLazy::Line do
     end
   end
 end
+
 describe OpenFlashChartLazy::Serie do
   describe "creating with time" do
     before(:each) do
