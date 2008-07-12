@@ -17,7 +17,7 @@ describe OpenFlashChartLazy::Pie do
   describe "adding a serie" do
     before(:each) do
       @stats = OpenFlashChartLazy::Pie.new("2008")
-      @data = [["TV",1000],["Internet",2343],["Post",233]]
+      @data = [["TV",1000],["Internet",2343],["Post",233],[nil,43]]
       @serie = OpenFlashChartLazy::Serie.new(@data,{:title=>"Ventas"})
       @stats.add_serie(@serie)
     end
@@ -33,7 +33,7 @@ describe OpenFlashChartLazy::Pie do
     it "should add the options to the elements hash" do
       @stats.elements[0][:type].should == "pie"
       @stats.elements[0][:colours].should be_a_kind_of(Array)
-      @stats.elements[0][:colours].length == 3
+      @stats.elements[0][:colours].length == 4
       @stats.elements[0][:start_angle].should == 35
       @stats.elements[0][:animate].should == true
       @stats.elements[0][:border].should == 2
@@ -46,11 +46,13 @@ describe OpenFlashChartLazy::Pie do
     it "should add the title to the element hash" do
       @stats.elements[0][:text].should == "Ventas"
     end
-    it "should fill the values of the with series data" do
-      @stats.elements[0][:values].length.should == 3
-      @stats.elements[0][:values][0].should == 1000  
-      @stats.elements[0][:values][1].should == 2343
-      @stats.elements[0][:values][2].should == 233
+    it "should fill the values and the annotations if present of the with series data" do
+      @stats.elements[0][:values].length.should == 4
+      @stats.elements[0][:values][0].should == {:value=>1000,:text=>"TV"}
+      @stats.elements[0][:values][1].should == {:value=>2343,:text=>"Internet"}
+      @stats.elements[0][:values][2].should == {:value=>233,:text=>"Post"}
+      @stats.elements[0][:values][3].should == {:value=>43, :text=>""}
+      
     end
   end
 end

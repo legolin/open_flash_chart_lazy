@@ -47,9 +47,15 @@ module OpenFlashChartLazy
           period = @options[:start_date] + i.months
           @labels[i] = period.strftime(@options[:date_label_formatter])
           @keys[i] = period.strftime(@options[:date_key_formatter])
-        elsif data.is_a?(Hash)
-          @labels[i] = "#{data.keys[i]}"
-          @keys[i] = data.keys[i]
+        elsif @data.is_a?(Hash)
+          @labels[i] = "#{@data.keys[i]}"
+          @keys[i] = @data.keys[i]
+        elsif @data.is_a?(Array)
+          if @data[i].is_a?(Array) and @data[i].length > 1
+            @labels[i] = "#{@data[i][0]}"
+          else
+            @labels[i] = "#{i}"
+          end
         else
           @labels[i] = "#{i}"
         end
@@ -138,8 +144,11 @@ module OpenFlashChartLazy
           :animate => true,
           :colours => PIE_COLORS}
       @elements.last.merge!(options)
+      @elements.last[:values] = []
       @series << serie
-      @elements.last[:values] = serie.values
+      serie.values.each_with_index do |v,i|
+        @elements.last[:values]<< {:text => serie.labels[i], :value => v}
+      end
     end
     def to_graph_json
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
