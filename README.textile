@@ -56,7 +56,7 @@ def progress
 
   bar_graph.add_serie(first_serie)
   bar_graph.add_serie(second_serie)
-
+  
   render :text=>bar_graph.to_graph_json
 end
 
@@ -84,6 +84,31 @@ h4. In the view
 
 <pre><code>
 <%= inline_graph(@pie_chart) %>
+</pre></code>
+
+h4. Customize the Chart
+
+All graph attributes are hash in general so you can add what you need and if the open_flash_chart add new parameters, just add them.
+
+
+<pre><code>
+bar_graph.x_axis[:labels][:rotate]="vertical"
+bar_graph.x_axis[:labels][:rotate]="vertical"
+bar_graph.x_axis[:colour]="#808080"
+bar_graph.x_axis["grid-colour"]="#A0A0A0"
+bar_graph.x_axis[:stroke]=0.5
+
+bar_graph.y_axis[:colour]="#808080"
+bar_graph.y_axis[:stroke]=0.5
+bar_graph.y_axis["grid-colour"]="#A0A0A0"
+</pre></code>
+
+h4. Background attributes
+
+You can specify all of them, this is handle by method missing so just use like this.
+
+<pre><code>
+bar_graph.bg_colour="#FFFFFF"
 </pre></code>
 
 h3. Other implementations for version 2
