@@ -16,6 +16,11 @@ describe OpenFlashChartLazy::Graph do
   it "should know the x axis" do
     @stats.x_axis.should be_a_kind_of(Hash)
   end
+  it "should add an instance variable with method_missing" do
+    @stats.bg_colour="#FF0000"
+    @stats.instance_variable_get(:@bg_colour).should == "#FF0000"
+    @stats.to_json.should match(/.*bg_colour.*/)
+  end
 end
 describe OpenFlashChartLazy::Pie do
   describe "creating a new Pie" do

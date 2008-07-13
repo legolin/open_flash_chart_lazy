@@ -98,8 +98,11 @@ module OpenFlashChartLazy
       @series = []
       @elements = []
       @title = {:text=>title}
-      @y_axis = {:min =>0,:max=>0,:steps=>1}
+      @y_axis = {}
       @x_axis = {:labels => []}
+    end
+    def method_missing(method, value)
+      self.instance_variable_set( "@#{method.to_s[0..-2]}".to_sym,value)
     end
   end
 
@@ -107,18 +110,14 @@ module OpenFlashChartLazy
   
     LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
     EXCLUDED_ATTRIBUTES = %w{series}
+    #{ "title": { "text": "Sat Jul 12 2008" }, "elements": [ { "type": "bar", "values": [ 9, 8, 7, 6, 5, 4, 3, 2, 1 ] } ] }
   
     def add_serie(serie,options={})
-      @elements << {:text=>serie.title,:type=>"line_dot",:width=>4,:dot_size=>5}
+      @elements << {:type=>"bar"}
       @elements.last.merge!(options)
       @series << serie
       @elements.last[:values] = serie.values
-      # the first serie will hold the x-axis labels
-      @x_axis[:labels] = @series.last.labels
-      @y_axis[:min] = (@y_axis[:min]>serie.min) ? serie.min : @y_axis[:min]
-      @y_axis[:max] = (@y_axis[:max]<serie.max) ? serie.max : @y_axis[:max]
-      @y_axis[:steps] = (@y_axis[:steps]<serie.steps) ? serie.max : @y_axis[:steps]
-      @elements.last[:colour]=LINE_COLORS[elements.length-1] if LINE_COLORS[elements.length-1]
+      @x_axis[:labels] = {:labels => @series.last.labels }
     end
     def to_graph_json
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
@@ -135,6 +134,10 @@ module OpenFlashChartLazy
   
     EXCLUDED_ATTRIBUTES = %w{series}
     LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
+    def initialize(title="Untitled")
+      super
+      @y_axis = {:min =>0,:max=>0,:steps=>1}.merge(@y_axis)
+    end
   
     def add_serie(serie,options={})
       @elements << {:text=>serie.title,:type=>"line_dot",:width=>4,:dot_size=>5}
@@ -142,7 +145,7 @@ module OpenFlashChartLazy
       @series << serie
       @elements.last[:values] = serie.values
       # the first serie will hold the x-axis labels
-      @x_axis[:labels] = @series.last.labels
+      @x_axis[:labels] = {:labels => @series.last.labels }
       @y_axis[:min] = (@y_axis[:min]>serie.min) ? serie.min : @y_axis[:min]
       @y_axis[:max] = (@y_axis[:max]<serie.max) ? serie.max : @y_axis[:max]
       @y_axis[:steps] = (@y_axis[:steps]<serie.steps) ? serie.max : @y_axis[:steps]
