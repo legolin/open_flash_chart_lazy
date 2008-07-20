@@ -44,7 +44,8 @@ module OpenFlashChartLazy
     def fill_keys_and_labels
       @items.times do |i|
         if @options[:start_date]
-          period = @options[:start_date] + i.months
+          new_period = Date.new(@options[:start_date].year,@options[:start_date].month,@options[:start_date].day) >> i
+          period = Time.mktime(new_period.year,new_period.month,new_period.day)
           @labels[i] = period.strftime(@options[:date_label_formatter])
           @keys[i] = period.strftime(@options[:date_key_formatter])
         elsif @data.is_a?(Hash)
