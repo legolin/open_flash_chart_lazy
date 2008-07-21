@@ -80,7 +80,15 @@ module OpenFlashChartLazy
         case @data.class.name
         when "Array"
           @data.each_with_index do |data,i|
-            @values[i]=data[1] unless data[1].nil?
+            if data.is_a?(Array)
+              unless data.length>1 and data[1]
+                @values[i]=data[1] 
+              elsif data.lenght==1
+                @values[i]=data[0] 
+              end
+            else
+              @vales[i]=data
+            end
           end
         when "Hash"
           @values = @data.values
