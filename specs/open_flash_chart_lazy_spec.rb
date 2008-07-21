@@ -83,7 +83,7 @@ end
 describe OpenFlashChartLazy::Bar do
   describe "creating a bar chart" do
     before(:each) do
-      @stats = OpenFlashChartLazy::Pie.new("2008")
+      @stats = OpenFlashChartLazy::Bar.new("2008")
       @data = [["TV",1000],["Internet",2343],["Post",233],[nil,43]]
       @serie = OpenFlashChartLazy::Serie.new(@data,{:title=>"Ventas"})
       @stats.add_serie(@serie)
@@ -103,12 +103,12 @@ describe OpenFlashChartLazy::Bar do
     it "should add the title to the element hash" do
       @stats.elements[0][:text].should == "Ventas"
     end
-    it "should fill the values and the annotations if present of the with series data" do
+    it "should fill the values if present" do
       @stats.elements[0][:values].length.should == 4
-      @stats.elements[0][:values][0].should == {:value=>1000,:text=>"TV"}
-      @stats.elements[0][:values][1].should == {:value=>2343,:text=>"Internet"}
-      @stats.elements[0][:values][2].should == {:value=>233,:text=>"Post"}
-      @stats.elements[0][:values][3].should == {:value=>43, :text=>""}
+      @stats.elements[0][:values][0].should == 1000
+      @stats.elements[0][:values][1].should == 2343
+      @stats.elements[0][:values][2].should == 233
+      @stats.elements[0][:values][3].should == 43
     end
 
   end

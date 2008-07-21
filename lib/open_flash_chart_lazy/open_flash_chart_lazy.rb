@@ -81,13 +81,13 @@ module OpenFlashChartLazy
         when "Array"
           @data.each_with_index do |data,i|
             if data.is_a?(Array)
-              unless data.length>1 and data[1]
+              if data.length>1 and data[1]
                 @values[i]=data[1] 
-              elsif data.lenght==1
-                @values[i]=data[0] 
+              elsif data.length==1
+                @values[i]=data[0]
               end
             else
-              @vales[i]=data
+              @values[i]=data
             end
           end
         when "Hash"
@@ -119,10 +119,9 @@ module OpenFlashChartLazy
   
     LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
     EXCLUDED_ATTRIBUTES = %w{series}
-    #{ "title": { "text": "Sat Jul 12 2008" }, "elements": [ { "type": "bar", "values": [ 9, 8, 7, 6, 5, 4, 3, 2, 1 ] } ] }
   
     def add_serie(serie,options={})
-      @elements << {:type=>"bar"}
+      @elements << {:type=>"bar",:text=>serie.title}
       @elements.last.merge!(options)
       @series << serie
       @elements.last[:values] = serie.values
