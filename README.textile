@@ -2,9 +2,12 @@ h1. OpenFlashChartLazy
 
 This plugin allows to use the OpenFlashChart version 2 with Rails.
 The idea is to get it as simple and extensible as possible, support future change of "open_flash_chart":http://teethgrinder.co.uk/open-flash-chart-2/
+To support this, I did not reproduce all the OFC attributes on the plugin, just only the basic. All the main attributes are hashes, so if OFC add a new attribute you can add too! and the code still the same!
 
-Initially will only support line and pie graph, but is easy to add support for the other graphs
+Initially will only support bar,line and pie graph, but is easy to add support for the other graphs
 I built it to solve a problem, not all the problems that we can have in the world ;-)
+
+Inline suport is limiter to only one graph due to the swf callbacks not available yet, but soon we can support more than one.
 
 h2. Todo
 
@@ -113,7 +116,8 @@ bar_graph.bg_colour="#FFFFFF"
 
 h3. Other implementations for version 2
 
-"http://github.com/korin/open_flash_chart_2/tree/master":http://github.com/korin/open_flash_chart_2/tree/master may be not working yet
+"http://github.com/korin/open_flash_chart_2/tree/master":http://github.com/korin/open_flash_chart_2/tree/master 
+"The 'Official' implementation":http://pullmonkey.com/2008/7/25/using-a-database-to-populate-an-open-flash-chart-graph
 
 h3. Implementations for version 1
 
