@@ -132,6 +132,23 @@ module OpenFlashChartLazy
     end
   end
 
+  class Bar3d < Graph
+  
+    LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
+    EXCLUDED_ATTRIBUTES = %w{series}
+  
+    def add_serie(serie,options={})
+      @elements << {:type=>"bar_3d",:text=>serie.title}
+      @elements.last.merge!(options)
+      @series << serie
+      @elements.last[:values] = serie.values
+      @x_axis[:labels] = {"3d"=>10,:colour=>"#909090",:labels => @series.last.labels }
+    end
+    def to_graph_json
+      self.to_json(:except=>EXCLUDED_ATTRIBUTES)
+    end
+  end
+
 
   class Line < Graph
     attr_accessor :series
