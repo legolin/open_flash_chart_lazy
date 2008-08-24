@@ -1,5 +1,6 @@
-require File.dirname(__FILE__) + '/../../../../spec/spec_helper'
-
+require 'spec'
+require 'sinatra'
+require File.expand_path(File.dirname(__FILE__) + "/../lib/open_flash_chart_lazy")
 
 describe OpenFlashChartLazy::Graph do
   before(:each) do
