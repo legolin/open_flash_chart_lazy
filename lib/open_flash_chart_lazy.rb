@@ -1,3 +1,4 @@
+require 'mash'
 require File.join(File.dirname(__FILE__),'open_flash_chart_lazy/open_flash_chart_lazy')
 
 # dumb hack to support sinatra
@@ -11,3 +12,4 @@ rescue
   require File.join(File.dirname(__FILE__),'open_flash_chart_lazy/open_flash_chart_lazy_sinatra')
   #not rails
 end
+
