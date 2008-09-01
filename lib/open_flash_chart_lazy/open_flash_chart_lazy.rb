@@ -98,17 +98,13 @@ module OpenFlashChartLazy
   end
 
   class Graph < Mash
-    attr_accessor :series
-    attr_accessor :elements
-    attr_accessor :title
-    attr_accessor :x_axis
-    attr_accessor :y_axis
     def initialize(title="Untitled")
-      @series = []
-      @elements = []
-      @title = Mash.new({:text=>title})
-      @y_axis = Mash.new({})
-      @x_axis = Mash.new({:labels => []})
+      super(  :x_axis=>Mash.new({:labels => []}),
+              :y_axis=>Mash.new,
+              :series=>[],
+              :elements=>[],
+              :title => Mash.new(:text=>title)
+              )
     end
   end
 
@@ -117,12 +113,12 @@ module OpenFlashChartLazy
     LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
     EXCLUDED_ATTRIBUTES = %w{series}
   
-    def add_serie(serie,options=Mash.new())
-      @elements << {:type=>"bar",:text=>serie.title}
-      @elements.last.merge!(options)
-      @series << serie
-      @elements.last[:values] = serie.values
-      @x_axis[:labels] = Mash.new({:labels => @series.last.labels })
+    def add_serie(serie,options=Mash.new)
+      self.elements << {:type=>"bar",:text=>serie.title}
+      self.elements.last.merge!(options)
+      self.series << serie
+      self.elements.last[:values] = serie.values
+      self.x_axis[:labels] = Mash.new({:labels => self.series.last.labels })
     end
     def to_graph_json
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
@@ -135,11 +131,11 @@ module OpenFlashChartLazy
     EXCLUDED_ATTRIBUTES = %w{series}
   
     def add_serie(serie,options=Mash.new)
-      @elements << Mash.new({:type=>"bar_3d",:text=>serie.title})
-      @elements.last.merge!(options)
-      @series << serie
-      @elements.last[:values] = serie.values
-      @x_axis.labels = Mash.new({"3d"=>10,:colour=>"#909090",:labels => @series.last.labels })
+      self.elements << Mash.new({:type=>"bar_3d",:text=>serie.title})
+      self.elements.last.merge!(options)
+      self.series << serie
+      self.elements.last[:values] = serie.values
+      self.x_axis.labels = Mash.new({"3d"=>10,:colour=>"#909090",:labels => self.series.last.labels })
     end
     def to_graph_json
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
@@ -148,30 +144,25 @@ module OpenFlashChartLazy
 
 
   class Line < Graph
-    attr_accessor :series
-    attr_accessor :elements
-    attr_accessor :title
-    attr_accessor :x_axis
-    attr_accessor :y_axis
   
     EXCLUDED_ATTRIBUTES = %w{series}
     LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
     def initialize(title="Untitled")
       super
-      @y_axis = Mash.new({:min =>0,:max=>0,:steps=>1}.merge(@y_axis))
+      self.y_axis = Mash.new({:min =>0,:max=>0,:steps=>1}.merge(self.y_axis))
     end
   
     def add_serie(serie,options=Mash.new)
-      @elements << Mash.new({:text=>serie.title,:type=>"line_dot",:width=>4,:dot_size=>5})
-      @elements.last.merge!(options)
-      @series << serie
-      @elements.last[:values] = serie.values
+      self.elements << Mash.new({:text=>serie.title,:type=>"line_dot",:width=>4,:dot_size=>5})
+      self.elements.last.merge!(options)
+      self.series << serie
+      self.elements.last[:values] = serie.values
       # the first serie will hold the x-axis labels
-      @x_axis[:labels] = {:labels => @series.last.labels }
-      @y_axis[:min] = (@y_axis[:min]>serie.min) ? serie.min : @y_axis[:min]
-      @y_axis[:max] = (@y_axis[:max]<serie.max) ? serie.max : @y_axis[:max]
-      @y_axis[:steps] = (@y_axis[:steps]<serie.steps) ? serie.max : @y_axis[:steps]
-      @elements.last[:colour]=LINE_COLORS[elements.length-1] if LINE_COLORS[elements.length-1]
+      self.x_axis[:labels] = {:labels => self.series.last.labels }
+      self.y_axis[:min] = (self.y_axis[:min]>serie.min) ? serie.min : self.y_axis[:min]
+      self.y_axis[:max] = (self.y_axis[:max]<serie.max) ? serie.max : self.y_axis[:max]
+      self.y_axis[:steps] = (self.y_axis[:steps]<serie.steps) ? serie.max : self.y_axis[:steps]
+      self.elements.last[:colour]=LINE_COLORS[elements.length-1] if LINE_COLORS[elements.length-1]
     end
     def to_graph_json
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
@@ -183,21 +174,21 @@ module OpenFlashChartLazy
     PIE_COLORS = [ "#d01f3c", "#356aa0", "#C79810" ]
     def initialize(title="Untitled")
       super
-      @x_axis = "null"
+      self.x_axis = "null"
     end
     def add_serie(serie,options=Mash.new)
-      @elements << {:text=>serie.title,
+      self.elements << Mash.new({:text=>serie.title,
           :type=>"pie",
           :border=>2,
           :alpha=>0.6,
           :start_angle=>35,
           :animate => true,
-          :colours => PIE_COLORS}
-      @elements.last.merge!(options)
-      @elements.last[:values] = []
-      @series << serie
+          :colours => PIE_COLORS})
+      self.elements.last.merge!(options)
+      self.elements.last[:values] = []
+      self.series << serie
       serie.values.each_with_index do |v,i|
-        @elements.last[:values]<< Mash.new({:text => serie.labels[i], :value => v})
+        self.elements.last[:values]<< Mash.new({:text => serie.labels[i], :value => v})
       end
     end
     def to_graph_json
