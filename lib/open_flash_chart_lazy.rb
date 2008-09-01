@@ -1,4 +1,5 @@
 require 'mash'
+require 'date'
 require File.join(File.dirname(__FILE__),'open_flash_chart_lazy/open_flash_chart_lazy')
 
 # dumb hack to support sinatra

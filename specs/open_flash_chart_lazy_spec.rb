@@ -1,6 +1,19 @@
 require 'spec'
+require 'spec/interop/test'
 require 'sinatra'
+require 'sinatra/test/methods'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/open_flash_chart_lazy")
+
+include Sinatra::Test::Methods
+ 
+Sinatra::Application.default_options.merge!(
+  :env => :test,
+  :run => false,
+  :raise_errors => true,
+  :logging => false
+)
+ 
+Sinatra.application.options = nil
 
 describe OpenFlashChartLazy::Graph do
   before(:each) do
@@ -11,16 +24,11 @@ describe OpenFlashChartLazy::Graph do
     @stats.series.should be_empty
   end
   it "should respond to title and include the text" do
-    @stats.title.should be_a_kind_of(Hash)
+    @stats.title.should be_a_kind_of(Mash)
     @stats.title[:text].should == "Titulo del grafico"
   end
   it "should know the x axis" do
-    @stats.x_axis.should be_a_kind_of(Hash)
-  end
-  it "should add an instance variable with method_missing" do
-    @stats.bg_colour="#FF0000"
-    @stats.instance_variable_get(:@bg_colour).should == "#FF0000"
-    @stats.to_json.should match(/.*bg_colour.*/)
+    @stats.x_axis.should be_a_kind_of(Mash)
   end
 end
 describe OpenFlashChartLazy::Pie do
@@ -33,7 +41,7 @@ describe OpenFlashChartLazy::Pie do
       @stats.series.should be_empty
     end
     it "should respond to title and include the text" do
-      @stats.title.should be_a_kind_of(Hash)
+      @stats.title.should be_a_kind_of(Mash)
       @stats.title[:text].should == "Titulo del grafico"
     end
   end
@@ -71,10 +79,12 @@ describe OpenFlashChartLazy::Pie do
     end
     it "should fill the values and the annotations if present of the with series data" do
       @stats.elements[0][:values].length.should == 4
-      @stats.elements[0][:values][0].should == {:value=>1000,:text=>"TV"}
-      @stats.elements[0][:values][1].should == {:value=>2343,:text=>"Internet"}
-      @stats.elements[0][:values][2].should == {:value=>233,:text=>"Post"}
-      @stats.elements[0][:values][3].should == {:value=>43, :text=>""}
+      @stats.elements[0][:values][0].value.should == 1000
+      @stats.elements[0][:values][0].text.should == "TV"
+      @stats.elements[0][:values][1].value.should == 2343
+      @stats.elements[0][:values][1].text.should == "Internet"
+      @stats.elements[0][:values][2].value.should == 233
+      @stats.elements[0][:values][3].text.should == ""
       
     end
   end
@@ -132,7 +142,7 @@ describe OpenFlashChartLazy::Line do
       @stats.elements.length.should == 1
     end
     it "should be a hash added as element" do
-      @stats.elements[0].should be_a_kind_of(Hash)
+      @stats.elements[0].should be_a_kind_of(Mash)
     end
     it "should add the options to the elements hash" do
       @stats.elements[0][:type].should == "line_dot"
@@ -144,7 +154,7 @@ describe OpenFlashChartLazy::Line do
     end
     it "should fill the values of the with series data" do
       @stats.elements[0][:values].length.should == 12
-      @stats.elements[0][:values][0].should == 0  
+      @stats.elements[0][:values][0].should == 0
       @stats.elements[0][:values][4].should == 500
       @stats.elements[0][:values][5].should == 1000
     end

@@ -44,7 +44,7 @@ module OpenFlashChartLazy
     def fill_keys_and_labels
       @items.times do |i|
         if @options[:start_date]
-          new_period = Date.new(@options[:start_date].year,@options[:start_date].month,@options[:start_date].day) >> i
+          new_period = Date.new(y=@options[:start_date].year,m=@options[:start_date].month,d=@options[:start_date].day) >> i
           period = Time.mktime(new_period.year,new_period.month,new_period.day)
           @labels[i] = period.strftime(@options[:date_label_formatter])
           @keys[i] = period.strftime(@options[:date_key_formatter])
@@ -97,7 +97,7 @@ module OpenFlashChartLazy
     end
   end
 
-  class Graph
+  class Graph < Mash
     attr_accessor :series
     attr_accessor :elements
     attr_accessor :title
@@ -109,9 +109,6 @@ module OpenFlashChartLazy
       @title = Mash.new({:text=>title})
       @y_axis = Mash.new({})
       @x_axis = Mash.new({:labels => []})
-    end
-    def method_missing(method, value)
-      self.instance_variable_set( "@#{method.to_s[0..-2]}".to_sym,value)
     end
   end
 
@@ -142,7 +139,7 @@ module OpenFlashChartLazy
       @elements.last.merge!(options)
       @series << serie
       @elements.last[:values] = serie.values
-      @x_axis[:labels] = Mash.new({"3d"=>10,:colour=>"#909090",:labels => @series.last.labels })
+      @x_axis.labels = Mash.new({"3d"=>10,:colour=>"#909090",:labels => @series.last.labels })
     end
     def to_graph_json
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
