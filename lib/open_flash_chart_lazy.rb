@@ -1,4 +1,4 @@
-require 'mash'
+require 'mhash'
 require 'json'
 require 'date'
 require File.join(File.dirname(__FILE__),'open_flash_chart_lazy/open_flash_chart_lazy')

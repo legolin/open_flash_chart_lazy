@@ -11,7 +11,7 @@ module OpenFlashChartLazy
     attr_accessor :max
     attr_accessor :min
     attr_accessor :steps
-    def initialize(data,options=Mash.new)
+    def initialize(data,options=Mhash.new)
       @data = data
       # the labels
       @labels = []
@@ -23,7 +23,7 @@ module OpenFlashChartLazy
       #default options
       @steps = 1
       @options = {:date_label_formatter=>"%b %Y",:date_key_formatter=>"%Y-%m",:title=>"Untitled"}
-      if @data.is_a?(Hash) or @data.is_a?(Mash)
+      if @data.is_a?(Hash) or @data.is_a?(Mhash)
         @items = data.length
       else
         @options.merge!({:items => data.length})
@@ -48,7 +48,7 @@ module OpenFlashChartLazy
           period = Time.mktime(new_period.year,new_period.month,new_period.day)
           @labels[i] = period.strftime(@options[:date_label_formatter])
           @keys[i] = period.strftime(@options[:date_key_formatter])
-        elsif @data.is_a?(Hash) or @data.is_a?(Mash)
+        elsif @data.is_a?(Hash) or @data.is_a?(Mhash)
           @labels[i] = "#{@data.keys[i]}"
           @keys[i] = @data.keys[i]
         elsif @data.is_a?(Array)
@@ -90,20 +90,20 @@ module OpenFlashChartLazy
               @values[i]=data
             end
           end
-        when "Hash","Mash"
+        when "Hash","Mhash"
           @values = @data.values
         end
       end
     end
   end
 
-  class Graph < Mash
+  class Graph < Mhash
     def initialize(title="Untitled")
-      super(  :x_axis=>Mash.new({:labels => []}),
-              :y_axis=>Mash.new,
+      super(  :x_axis=>Mhash.new({:labels => []}),
+              :y_axis=>Mhash.new,
               :series=>[],
               :elements=>[],
-              :title => Mash.new(:text=>title)
+              :title => Mhash.new(:text=>title)
               )
     end
   end
@@ -113,12 +113,12 @@ module OpenFlashChartLazy
     LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
     EXCLUDED_ATTRIBUTES = %w{series}
   
-    def add_serie(serie,options=Mash.new)
+    def add_serie(serie,options=Mhash.new)
       self.elements << {:type=>"bar",:text=>serie.title}
       self.elements.last.merge!(options)
       self.series << serie
       self.elements.last[:values] = serie.values
-      self.x_axis[:labels] = Mash.new({:labels => self.series.last.labels })
+      self.x_axis[:labels] = Mhash.new({:labels => self.series.last.labels })
     end
     def to_graph_json
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
@@ -130,12 +130,12 @@ module OpenFlashChartLazy
     LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
     EXCLUDED_ATTRIBUTES = %w{series}
   
-    def add_serie(serie,options=Mash.new)
-      self.elements << Mash.new({:type=>"bar_3d",:text=>serie.title})
+    def add_serie(serie,options=Mhash.new)
+      self.elements << Mhash.new({:type=>"bar_3d",:text=>serie.title})
       self.elements.last.merge!(options)
       self.series << serie
       self.elements.last[:values] = serie.values
-      self.x_axis.labels = Mash.new({"3d"=>10,:colour=>"#909090",:labels => self.series.last.labels })
+      self.x_axis.labels = Mhash.new({"3d"=>10,:colour=>"#909090",:labels => self.series.last.labels })
     end
     def to_graph_json
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
@@ -149,11 +149,11 @@ module OpenFlashChartLazy
     LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
     def initialize(title="Untitled")
       super
-      self.y_axis = Mash.new({:min =>0,:max=>0,:steps=>1}.merge(self.y_axis))
+      self.y_axis = Mhash.new({:min =>0,:max=>0,:steps=>1}.merge(self.y_axis))
     end
   
-    def add_serie(serie,options=Mash.new)
-      self.elements << Mash.new({:text=>serie.title,:type=>"line_dot",:width=>4,:dot_size=>5})
+    def add_serie(serie,options=Mhash.new)
+      self.elements << Mhash.new({:text=>serie.title,:type=>"line_dot",:width=>4,:dot_size=>5})
       self.elements.last.merge!(options)
       self.series << serie
       self.elements.last[:values] = serie.values
@@ -176,8 +176,8 @@ module OpenFlashChartLazy
       super
       self.x_axis = "null"
     end
-    def add_serie(serie,options=Mash.new)
-      self.elements << Mash.new({:text=>serie.title,
+    def add_serie(serie,options=Mhash.new)
+      self.elements << Mhash.new({:text=>serie.title,
           :type=>"pie",
           :border=>2,
           :alpha=>0.6,
@@ -188,7 +188,7 @@ module OpenFlashChartLazy
       self.elements.last[:values] = []
       self.series << serie
       serie.values.each_with_index do |v,i|
-        self.elements.last[:values]<< Mash.new({:text => serie.labels[i], :value => v})
+        self.elements.last[:values]<< Mhash.new({:text => serie.labels[i], :value => v})
       end
     end
     def to_graph_json

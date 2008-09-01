@@ -24,11 +24,11 @@ describe OpenFlashChartLazy::Graph do
     @stats.series.should be_empty
   end
   it "should respond to title and include the text" do
-    @stats.title.should be_a_kind_of(Mash)
+    @stats.title.should be_a_kind_of(Mhash)
     @stats.title[:text].should == "Titulo del grafico"
   end
   it "should know the x axis" do
-    @stats.x_axis.should be_a_kind_of(Mash)
+    @stats.x_axis.should be_a_kind_of(Mhash)
   end
 end
 describe OpenFlashChartLazy::Pie do
@@ -41,7 +41,7 @@ describe OpenFlashChartLazy::Pie do
       @stats.series.should be_empty
     end
     it "should respond to title and include the text" do
-      @stats.title.should be_a_kind_of(Mash)
+      @stats.title.should be_a_kind_of(Mhash)
       @stats.title[:text].should == "Titulo del grafico"
     end
   end
@@ -142,7 +142,7 @@ describe OpenFlashChartLazy::Line do
       @stats.elements.length.should == 1
     end
     it "should be a hash added as element" do
-      @stats.elements[0].should be_a_kind_of(Mash)
+      @stats.elements[0].should be_a_kind_of(Mhash)
     end
     it "should add the options to the elements hash" do
       @stats.elements[0][:type].should == "line_dot"

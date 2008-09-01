@@ -11,6 +11,7 @@ Inline suport is limiter to only one graph due to the swf callbacks not availabl
 
 h2. Todo
 
+* Universal Rails-Sinatra-Merb compatible
 * More doc
 * Support for other graphs
 * Label annotation for pies
@@ -24,7 +25,19 @@ h2. Known issues
 * Not support for 2 graphs inline yet.
 * Inline graph not compatible with prototype.js
 
+h2. Dependencies
+
+Install this gems before.
+
+Mhash
+<pre><code>
+  gem sources -a http://gems.github.com
+  sudo gem install peterpunk-mhash
+</pre></code>
+
 h2. Install
+
+h3. Rails
 
 <pre><code>
 cd vendor/plugins
@@ -34,13 +47,22 @@ cd ..
 rake open_flash_chart_lazy:install
 </pre></code>
 
+h3. Sinatra
+
+<pre><code>
+cd vendor
+git clone git://github.com/peterpunk/open_flash_chart_lazy.git
+cd ..
+rake open_flash_chart_lazy:install (no tested)
+</pre></code>
+
 h2. Uninstall
 
 <pre><code>
 rake open_flash_chart_lazy:remove
 </pre></code>
 
-h2. Examples
+h2. Examples for Rails
 
 h3. With remote data
 
