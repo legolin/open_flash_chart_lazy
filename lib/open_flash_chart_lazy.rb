@@ -1,5 +1,4 @@
 require 'mhash'
-require 'json'
 require 'date'
 require File.join(File.dirname(__FILE__),'open_flash_chart_lazy/open_flash_chart_lazy')
 
@@ -11,6 +10,7 @@ begin
     include ActionView::Helpers::OpenFlashChartLazyHelper
   end
 rescue
+  require 'json'
   require File.join(File.dirname(__FILE__),'open_flash_chart_lazy/open_flash_chart_lazy_sinatra')
   #not rails
 end
