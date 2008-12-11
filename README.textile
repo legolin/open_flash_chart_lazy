@@ -114,6 +114,12 @@ h4. In the view
 <%= inline_graph(@pie_chart,"my_div") %>
 </pre></code>
 
+h4. In the head of layout
+
+<pre><code>
+<%= yield :ofcl %>
+</pre></code>
+
 h4. Customize the Chart
 
 All graph attributes are hash in general so you can add what you need and if the open_flash_chart add new parameters, just add them.
