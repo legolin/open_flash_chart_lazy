@@ -1,19 +1,20 @@
-require 'spec'
-require 'spec/interop/test'
-require 'sinatra'
-require 'sinatra/test/methods'
-require File.expand_path(File.dirname(__FILE__) + "/../lib/open_flash_chart_lazy")
+require 'spec/spec_helper'
+#require 'spec/interop/test'
+#require 'sinatra'
+#require 'sinatra/test/methods'
+#require File.expand_path(File.dirname(__FILE__) + "/../lib/open_flash_chart_lazy")
 
-include Sinatra::Test::Methods
+#include Sinatra::Test::Methods
  
-Sinatra::Application.default_options.merge!(
-  :env => :test,
-  :run => false,
-  :raise_errors => true,
-  :logging => false
-)
+#Sinatra::Application.default_options.merge!(
+#  :env => :test,
+#  :run => false,
+#  :raise_errors => true,
+#  :logging => false
+#)
  
-Sinatra.application.options = nil
+ 
+#Sinatra.application.options = nil
 
 describe OpenFlashChartLazy::Graph do
   before(:each) do

@@ -9,21 +9,24 @@ I built it to solve a problem, not all the problems that we can have in the worl
 
 Inline suport is limiter to only one graph due to the swf callbacks not available yet, but soon we can support more than one.
 
+h2. News
+
+* Multiple inline graphs supported
+
 h2. Todo
 
 * Universal Rails-Sinatra-Merb compatible
 * More doc
 * Support for other graphs
 * Label annotation for pies
-* May be more specs? mmm
+* More specs
 * Add series matcher block to allow any kind of matcher for series
 * Avoid to specify the start_date for time series for each serie
 * Add periodically_call_remote_graph (rodrigo orrego chileonrails)
 
 h2. Known issues
 
-* Not support for 2 graphs inline yet.
-* Inline graph not compatible with prototype.js
+* do not include prototype in the same page of graph
 
 h2. Dependencies
 
@@ -108,7 +111,7 @@ end
 h4. In the view
 
 <pre><code>
-<%= inline_graph(@pie_chart) %>
+<%= inline_graph(@pie_chart,"my_div") %>
 </pre></code>
 
 h4. Customize the Chart
