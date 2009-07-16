@@ -1,20 +1,8 @@
-require 'spec/spec_helper'
-#require 'spec/interop/test'
-#require 'sinatra'
-#require 'sinatra/test/methods'
-#require File.expand_path(File.dirname(__FILE__) + "/../lib/open_flash_chart_lazy")
-
-#include Sinatra::Test::Methods
- 
-#Sinatra::Application.default_options.merge!(
-#  :env => :test,
-#  :run => false,
-#  :raise_errors => true,
-#  :logging => false
-#)
- 
- 
-#Sinatra.application.options = nil
+#require 'spec/spec_helper'
+require 'spec'
+require 'rack/test'
+require 'sinatra'
+require File.expand_path(File.dirname(__FILE__) + "/../lib/open_flash_chart_lazy")
 
 describe OpenFlashChartLazy::Graph do
   before(:each) do
@@ -25,11 +13,11 @@ describe OpenFlashChartLazy::Graph do
     @stats.series.should be_empty
   end
   it "should respond to title and include the text" do
-    @stats.title.should be_a_kind_of(Mhash)
+    @stats.title.should be_a_kind_of(Mash)
     @stats.title[:text].should == "Titulo del grafico"
   end
   it "should know the x axis" do
-    @stats.x_axis.should be_a_kind_of(Mhash)
+    @stats.x_axis.should be_a_kind_of(Mash)
   end
 end
 describe OpenFlashChartLazy::Pie do
@@ -42,7 +30,7 @@ describe OpenFlashChartLazy::Pie do
       @stats.series.should be_empty
     end
     it "should respond to title and include the text" do
-      @stats.title.should be_a_kind_of(Mhash)
+      @stats.title.should be_a_kind_of(Mash)
       @stats.title[:text].should == "Titulo del grafico"
     end
   end
@@ -143,7 +131,7 @@ describe OpenFlashChartLazy::Line do
       @stats.elements.length.should == 1
     end
     it "should be a hash added as element" do
-      @stats.elements[0].should be_a_kind_of(Mhash)
+      @stats.elements[0].should be_a_kind_of(Mash)
     end
     it "should add the options to the elements hash" do
       @stats.elements[0][:type].should == "line_dot"

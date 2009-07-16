@@ -3,13 +3,16 @@ helpers do
     html_options.merge!({:id=>dom_id})
     javascript_tag(swf_object(dom_id,options)).concat(content_tag("div","",html_options))
   end
+  
   def javascript_tag(content_or_options_with_block = nil, html_options = {})
     content = content_or_options_with_block
     content_tag("script",javascript_cdata_section(content), html_options.merge(:type => "text/javascript"))
   end
+  
   def cdata_section(content)
     "<![CDATA[#{content}]]>"
   end
+  
   def javascript_cdata_section(content) #:nodoc:
     "\n//#{cdata_section("\n#{content}\n//")}\n"
   end
