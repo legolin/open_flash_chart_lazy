@@ -22,7 +22,7 @@ module OpenFlashChartLazy
       @max = 0
       #default options
       @steps = 1
-      @options = {:date_label_formatter=>"%b %Y",:date_key_formatter=>"%Y-%m",:title=>"Untitled"}
+      @options = {:end_date => Date.today, :date_label_formatter=>"%b %Y",:date_key_formatter=>"%Y-%m-%d",:title=>"Untitled"}
       if @data.is_a?(Hash) or @data.is_a?(Mhash)
         @items = data.length
       else
@@ -32,7 +32,6 @@ module OpenFlashChartLazy
       # set title
       @title = options[:title]
       # the values
-      @values = [0] * @items
       fill_keys_and_labels
       fill_values
       
@@ -40,32 +39,42 @@ module OpenFlashChartLazy
     def time_serie?
       !@options[:start_date].nil?
     end
+    
     private
+    
     def fill_keys_and_labels
-      @items.times do |i|
-        if @options[:start_date]
-          new_period = Date.new(y=@options[:start_date].year,m=@options[:start_date].month,d=@options[:start_date].day) >> i
-          period = Time.mktime(new_period.year,new_period.month,new_period.day)
-          @labels[i] = period.strftime(@options[:date_label_formatter])
-          @keys[i] = period.strftime(@options[:date_key_formatter])
-        elsif @data.is_a?(Hash) or @data.is_a?(Mhash)
-          @labels[i] = "#{@data.keys[i]}"
-          @keys[i] = @data.keys[i]
-        elsif @data.is_a?(Array)
-          if @data[i].is_a?(Array) and @data[i].length > 1
-            @labels[i] = "#{@data[i][0]}"
+      if time_serie?
+          @keys = []
+          @labels = []
+          @options[:start_date].upto(@options[:end_date]) do |day|
+            @keys << day.strftime(@options[:date_key_formatter])
+            @labels << ((day.mday == 1) ? day.strftime(@options[:date_label_formatter]) : '')  #(day.mday == 1 ? day.strftime(@options[:date_label_formatter]) : '')
+          end
+      else
+        @items.times do |i|
+          if @data.is_a?(Hash) or @data.is_a?(Mhash)
+            @labels[i] = "#{@data.keys[i]}"
+            @keys[i] = @data.keys[i]
+          elsif @data.is_a?(Array)
+            if @data[i].is_a?(Array) and @data[i].length > 1
+              @labels[i] = "#{@data[i][0]}"
+            else
+              @labels[i] = "#{i}"
+            end
           else
             @labels[i] = "#{i}"
           end
-        else
-          @labels[i] = "#{i}"
         end
       end
     end
     def fill_values
       if time_serie?
+        @values = [0] * @keys.length
         @data.each do |element|
-          period = "#{element[0].split('-')[0]}-#{element[0].split('-')[1].rjust(2,'0')}" unless element[0].nil?
+          unless element[0].nil?
+            year, month, day = element[0].split('-')
+            period = "#{year}-#{month.rjust(2,'0')}-#{day.rjust(2, '0')}"
+          end
           if @keys.index(period)
             @values[@keys.index(period)]=0
             if element[1]
@@ -77,6 +86,7 @@ module OpenFlashChartLazy
           end
         end
       else
+        @values = [0] * @items
         case @data.class.name
         when "Array"
           @data.each_with_index do |data,i|
@@ -153,15 +163,17 @@ module OpenFlashChartLazy
     end
   
     def add_serie(serie,options=Mhash.new)
-      self.elements << Mhash.new({:text=>serie.title,:type=>"line_dot",:width=>4,:dot_size=>5})
+      self.elements << Mhash.new({:text=>serie.title,:type=>"line",:width=>4,:dot_size=>2})
       self.elements.last.merge!(options)
       self.series << serie
       self.elements.last[:values] = serie.values
       # the first serie will hold the x-axis labels
       self.x_axis[:labels] = {:labels => self.series.last.labels }
+      self.x_axis[:grid_colour] = "888888"
       self.y_axis[:min] = (self.y_axis[:min]>serie.min) ? serie.min : self.y_axis[:min]
       self.y_axis[:max] = (self.y_axis[:max]<serie.max) ? serie.max : self.y_axis[:max]
       self.y_axis[:steps] = (self.y_axis[:steps]<serie.steps) ? serie.max : self.y_axis[:steps]
+      self.y_axis[:grid_colour] = "888888"
       self.elements.last[:colour]=LINE_COLORS[elements.length-1] if LINE_COLORS[elements.length-1]
     end
     def to_graph_json
