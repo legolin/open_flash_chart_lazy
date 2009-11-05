@@ -46,7 +46,8 @@ module OpenFlashChartLazy
       if time_serie?
           @keys = []
           @labels = []
-          @options[:start_date].upto(@options[:end_date]) do |day|
+          @label_start_date = @options[:start_date] - @options[:start_date].mday.days
+          @label_start_date.upto(@options[:end_date]) do |day|
             @keys << day.strftime(@options[:date_key_formatter])
             @labels << ((day.mday == 1) ? day.strftime(@options[:date_label_formatter]) : '')  #(day.mday == 1 ? day.strftime(@options[:date_label_formatter]) : '')
           end
@@ -69,22 +70,21 @@ module OpenFlashChartLazy
     end
     def fill_values
       if time_serie?
-        @values = [0] * @keys.length
+        @values = [nil] * @keys.length
         @data.each do |element|
           unless element[0].nil?
             year, month, day = element[0].split('-')
             period = "#{year}-#{month.rjust(2,'0')}-#{day.rjust(2, '0')}"
           end
           if @keys.index(period)
-            @values[@keys.index(period)]=0
-            if element[1]
-              @min = (@min > element[1]) ? element[1] : @min
-              @max = (@max < element[1]) ? element[1] : @max
-              @steps = (@max - @min) / 5
-              @values[@keys.index(period)]=element[1]
-            end
+            @values[@keys.index(period)]=element[1] || 0
           end
         end
+        @min = @values.compact.min || 0
+        @max = ((@values.compact.max / 10) + 1).to_i * 10
+
+        @steps = (@max - @min) / 5
+        
       else
         @values = [0] * @items
         case @data.class.name
@@ -152,7 +152,6 @@ module OpenFlashChartLazy
     end
   end
 
-
   class Line < Graph
   
     EXCLUDED_ATTRIBUTES = %w{series}
@@ -180,6 +179,41 @@ module OpenFlashChartLazy
       self.to_json(:except=>EXCLUDED_ATTRIBUTES)
     end
   end
+  
+  class ScatterLine < Graph
+  
+    EXCLUDED_ATTRIBUTES = %w{series}
+    LINE_COLORS = %w{#33ff33 #ff33ff #dd00ee}
+    def initialize(title="Untitled")
+      super
+      self.y_axis = Mhash.new({:min =>0,:max=>0,:steps=>1}.merge(self.y_axis))
+    end
+  
+    def add_serie(serie,options=Mhash.new)
+      self['dot-style'] = {:type => "hollow-dot", "dot-size" => 3, "halo-size" => 2 }
+      self.elements << Mhash.new({:text=>serie.title,:type=>"scatter_line",:width=>4})
+      self.elements.last.merge!(options)
+      self.series << serie
+      values = []
+      serie.keys.each_with_index{|key, index| values << {:x => index, :y => serie.values[index]} unless serie.values[index].nil? }
+      self.elements.last[:values] = values
+      # the first serie will hold the x-axis labels
+      self.x_axis[:labels] = {:labels => self.series.last.labels }
+      self.x_axis[:grid_colour] = "888888"
+      self.x_axis[:min] = 0
+      self.x_axis[:max] = self.series.last.keys.length
+      self.y_axis[:min] = (self.y_axis[:min]>serie.min) ? serie.min : self.y_axis[:min]
+      self.y_axis[:max] = (self.y_axis[:max]<serie.max) ? serie.max : self.y_axis[:max]
+      self.y_axis[:steps] = (self.y_axis[:steps]<serie.steps) ? serie.max : self.y_axis[:steps]
+      self.y_axis[:grid_colour] = "888888"
+      self.elements.last[:colour]=LINE_COLORS[elements.length-1] if LINE_COLORS[elements.length-1]
+    end
+    def to_graph_json
+      self.to_json(:except=>EXCLUDED_ATTRIBUTES)
+    end
+  end
+  
+  
   class Pie < Graph
   
     EXCLUDED_ATTRIBUTES = %w{series}
